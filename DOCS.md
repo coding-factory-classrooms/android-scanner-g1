@@ -450,5 +450,3 @@ R : Mock les Repositories injectés, vérifier les mises à jour de `uiState`.
 R : Oui, mais éviter si possible. Préférer un ViewModel par feature.
 
 ---
-
-Fin du document.
