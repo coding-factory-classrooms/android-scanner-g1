@@ -51,8 +51,7 @@ class DatabaseFixtureServiceImpl(
                 inputLange = "fr-FR",
                 outputLange = "en-US",
                 OriginaleText = "Bonjour, comment allez-vous ?",
-                TradText = "Hello, how are you?",
-                pathAudioFile = "/storage/emulated/0/Download/audio_001.mp3"
+                TradText = "Hello, how are you?"
             ),
             Translation(
                 id = 0,
@@ -61,8 +60,7 @@ class DatabaseFixtureServiceImpl(
                 inputLange = "en-US",
                 outputLange = "fr-FR",
                 OriginaleText = "Good morning, have a nice day!",
-                TradText = "Bonjour, passez une bonne journée !",
-                pathAudioFile = "/storage/emulated/0/Download/audio_002.mp3"
+                TradText = "Bonjour, passez une bonne journée !"
             ),
             Translation(
                 id = 0,
@@ -71,8 +69,7 @@ class DatabaseFixtureServiceImpl(
                 inputLange = "fr-FR",
                 outputLange = "es-ES",
                 OriginaleText = "Merci beaucoup pour votre aide",
-                TradText = "Muchas gracias por tu ayuda",
-                pathAudioFile = "/storage/emulated/0/Download/audio_003.mp3"
+                TradText = "Muchas gracias por tu ayuda"
             ),
             Translation(
                 id = 0,
@@ -81,8 +78,7 @@ class DatabaseFixtureServiceImpl(
                 inputLange = "de-DE",
                 outputLange = "fr-FR",
                 OriginaleText = "Guten Tag, wie geht es Ihnen?",
-                TradText = "Bonjour, comment allez-vous ?",
-                pathAudioFile = "/storage/emulated/0/Download/audio_004.mp3"
+                TradText = "Bonjour, comment allez-vous ?"
             ),
             Translation(
                 id = 0,
@@ -91,8 +87,7 @@ class DatabaseFixtureServiceImpl(
                 inputLange = "it-IT",
                 outputLange = "fr-FR",
                 OriginaleText = "Ciao, come stai?",
-                TradText = "Salut, comment vas-tu ?",
-                pathAudioFile = "/storage/emulated/0/Download/audio_005.mp3"
+                TradText = "Salut, comment vas-tu ?"
             )
         )
 

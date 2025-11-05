@@ -13,16 +13,16 @@ import androidx.compose.ui.unit.dp
 import com.example.scanner.ui.components.atoms.DebugIconButton
 import com.example.scanner.ui.components.atoms.RecordIconButton
 import com.example.scanner.ui.components.atoms.StopIconButton
-import com.example.scanner.ui.components.molecules.AmplitudeVisualizer
 import com.example.scanner.ui.components.molecules.DurationDisplay
+import com.example.scanner.ui.components.molecules.TranscribedTextDisplay
 
 @Composable
 fun RecordingControls(
     isRecording: Boolean,
     duration: Long,
-    amplitude: Int,
+    transcribedText: String,
     onRecordClick: () -> Unit,
-    onDebugClick: ()-> Unit,
+    onDebugClick: () -> Unit,
     onStopClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -32,8 +32,14 @@ fun RecordingControls(
         verticalArrangement = Arrangement.Center
     ) {
         if (isRecording) {
-            AmplitudeVisualizer(amplitude = amplitude)
-            Spacer(modifier = Modifier.height(24.dp))
+            // Afficher le texte transcrit en temps réel
+            if (transcribedText.isNotEmpty()) {
+                TranscribedTextDisplay(
+                    text = transcribedText,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
             DurationDisplay(duration = duration)
             Spacer(modifier = Modifier.height(32.dp))
             StopIconButton(

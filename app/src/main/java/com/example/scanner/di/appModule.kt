@@ -28,5 +28,5 @@ val appModule = module {
     single<AudioRepository> { AudioRepositoryImpl(get()) }
     
     // ViewModels
-    viewModel { AudioRecorderViewModel(get(), get()) }
+    viewModel { AudioRecorderViewModel(get(), get(), get()) }
 }

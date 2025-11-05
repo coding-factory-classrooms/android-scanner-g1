@@ -13,8 +13,7 @@ composeBom = "2025.10.01"
 mockitoCore = "5.20.0"
 turbine = "1.2.1"
 koin = "3.5.6"
-room = "2.6.1"
-roomCommonJvm = "2.8.3"
+room = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,7 +41,6 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

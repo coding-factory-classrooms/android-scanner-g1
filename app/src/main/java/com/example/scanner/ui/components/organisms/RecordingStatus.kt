@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.scanner.ui.components.atoms.ErrorText
 import com.example.scanner.ui.components.atoms.StatusText
-import com.example.scanner.ui.components.molecules.RecordedFileCard
+import com.example.scanner.ui.components.molecules.TranscribedTextCard
 
 @Composable
 fun RecordingStatus(
@@ -22,14 +22,14 @@ fun RecordingStatus(
     modifier: Modifier = Modifier
 ) {
     when (status) {
-        is RecordingStatusState.Idle -> StatusText("Prêt à enregistrer", modifier)
+        is RecordingStatusState.Idle -> StatusText("Prêt à transcrire", modifier)
         is RecordingStatusState.Recorded -> Column(
             modifier = modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            RecordedFileCard(status.base64)
+            TranscribedTextCard(status.text)
             Spacer(Modifier.height(24.dp))
-            Button(onClick = onReset) { Text("Nouvel enregistrement") }
+            Button(onClick = onReset) { Text("Nouvelle transcription") }
         }
         is RecordingStatusState.Error -> Column(
             modifier = modifier.fillMaxWidth(),
@@ -43,6 +43,6 @@ fun RecordingStatus(
 
 sealed class RecordingStatusState {
     object Idle : RecordingStatusState()
-    data class Recorded(val base64: String) : RecordingStatusState()
+    data class Recorded(val text: String) : RecordingStatusState()
     data class Error(val message: String) : RecordingStatusState()
 }

@@ -64,9 +64,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     
-    // Room
     implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.common.jvm)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     
