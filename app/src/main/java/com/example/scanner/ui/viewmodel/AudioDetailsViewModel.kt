@@ -52,6 +52,7 @@ class AudioDetailsViewModel(
         }
     }
 
+    // Methode pour envoyer la bonne fle au player
     fun getAudioPath(): String {
         return _uiState.value.translation?.pathAudioFile ?: ""
     }
