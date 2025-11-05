@@ -11,6 +11,7 @@ data class Translation(
     val createAt: Long = System.currentTimeMillis(),
     val inputLange: String,
     val outputLange: String,
-    val OriginaleText: String,
-    val TradText: String
+    val originalText: String,
+    val tradText: String,
+    val pathAudioFile: String
 )

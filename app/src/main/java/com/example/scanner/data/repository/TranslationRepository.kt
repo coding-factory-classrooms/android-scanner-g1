@@ -19,8 +19,8 @@ class TranslationRepositoryImpl(private val dao: TranslationDao): TranslationRep
                     createAt = System.currentTimeMillis(),
                     inputLange = "fr",
                     outputLange = "en",
-                    OriginaleText = "Bonjour, comment allez-vous?",
-                    TradText = "Hello, how are you?",
+                    originalText = "Bonjour, comment allez-vous?",
+                    tradText = "Hello, how are you?",
                     pathAudioFile = "/fake/audio/path/translation_$id.mp3"
                 )
             )

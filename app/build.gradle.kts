@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.compose.material3)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     

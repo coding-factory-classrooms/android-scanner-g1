@@ -29,7 +29,7 @@ class AudioDetailsViewModel(
     val uiState: StateFlow<AudioDetailsUiState> = _uiState
 
 
-    fun loadTranslation(id: Long, useFakeData: Boolean = false) {
+    fun loadTranslation(id: Long, useFakeData: Boolean = true) {
         viewModelScope.launch {
             try {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)

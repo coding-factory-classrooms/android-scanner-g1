@@ -156,10 +156,14 @@ class AudioRecorderViewModel(
         
         viewModelScope.launch {
             val translation = Translation(
+                id = 1,
+                isFave = false,
+                createAt = 2342424,
                 inputLange = _uiState.value.selectedLanguage,
                 outputLange = "", // Sera défini lors de la traduction
-                OriginaleText = text,
-                TradText = "" // Sera défini lors de la traduction
+                originalText = text,
+                tradText = "",
+                pathAudioFile =  "path/vers/laudio"// Sera défini lors de la traduction
             )
             translationDao.insert(translation)
         }
