@@ -34,6 +34,8 @@ class AudioRecorderViewModel(
     private val audioRepository: AudioRepository
 ) : AndroidViewModel(application) {
 
+    val durationState = MutableStateFlow(0L)
+
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
@@ -139,11 +141,13 @@ class AudioRecorderViewModel(
     private fun startDurationTracking() {
         durationJob?.cancel()
         durationJob = viewModelScope.launch {
-            var duration = 0L
-            while (audioRepository.isRecording()) {
+            while (audioRepository.isRecording() && durationState.value < 60000) {
                 delay(1000)
-                duration += 1000
-                _uiState.update { it.copy(recordingDuration = duration) }
+                durationState.value += 1000
+                _uiState.update { it.copy(recordingDuration = durationState.value) }
+            }
+            if (durationState.value >= 60000) {
+                stopRecording()
             }
         }
     }

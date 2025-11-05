@@ -31,6 +31,7 @@ fun AudioRecorderScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val duration by viewModel.durationState.collectAsState()
     val context = LocalContext.current
     val hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == android.content.pm.PackageManager.PERMISSION_GRANTED
 
@@ -81,7 +82,7 @@ fun AudioRecorderScreen(
                 }
                 RecordingControls(
                     isRecording = false,
-                    duration = 0L,
+                    duration = duration,
                     amplitude = 0,
                     onRecordClick = {
                         if (hasPermission) viewModel.startRecording()
