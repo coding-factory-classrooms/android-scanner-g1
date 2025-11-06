@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.scanner.ui.screen.AudioRecorderScreen
+import com.example.scanner.ui.screen.TranslationListScreen
 import com.example.scanner.ui.theme.ScannerTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,6 +22,9 @@ class MainActivity : ComponentActivity() {
                     AudioRecorderScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
+                    //TranslationListScreen(
+                      //  modifier = Modifier.padding(innerPadding)
+                    //)
                 }
             }
         }
