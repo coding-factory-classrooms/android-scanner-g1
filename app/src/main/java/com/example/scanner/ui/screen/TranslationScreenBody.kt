@@ -55,9 +55,9 @@ fun TranslationList(
         items(translations) { translation ->
             TranslationItem(
                 translation = translation,
-                onItemClick = { onItemClick(translation.id) }
-            )
+                onItemClick = { onItemClick(translation.id) },
                 onDeleteClick = { onDelete(translation.id) }
+            )
         }
     }
 }
