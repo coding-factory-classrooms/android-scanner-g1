@@ -52,6 +52,7 @@ fun TranslationListScreen(
             uiState = uiState,
             onItemClick = onItemClick,
             onDelete = { id -> viewModel.deleteTranslation(id) },
+            onToggleFavorite = { id, currentIsFave -> viewModel.toggleFavorite(id, currentIsFave) },
             modifier = Modifier
         )
     }
