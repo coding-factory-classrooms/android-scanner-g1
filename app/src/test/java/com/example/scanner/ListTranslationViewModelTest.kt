@@ -3,8 +3,7 @@ package com.example.scanner.ui.viewmodel
 import com.example.scanner.data.model.Translation
 import com.example.scanner.data.repository.TranslationRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
@@ -18,7 +17,7 @@ class ListTranslationViewModelTest {
 
     private lateinit var translationRepository: TranslationRepository
     private lateinit var viewModel: ListTranslationViewModel
-    private val testDispatcher = StandardTestDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
@@ -36,7 +35,6 @@ class ListTranslationViewModelTest {
             .thenReturn(Result.success(mockTranslations))
 
         viewModel.loadTranslations()
-        advanceUntilIdle()
 
         assertEquals(mockTranslations, viewModel.uiState.value.translations)
         assertNull(viewModel.uiState.value.errorMessage)
@@ -48,7 +46,6 @@ class ListTranslationViewModelTest {
             .thenReturn(Result.failure(Exception("Network error")))
 
         viewModel.loadTranslations()
-        advanceUntilIdle()
 
         assertEquals("Erreur de chargement", viewModel.uiState.value.errorMessage)
     }
@@ -63,9 +60,7 @@ class ListTranslationViewModelTest {
             .thenReturn(Result.success(mockTranslations))
 
         viewModel.loadTranslations()
-        advanceUntilIdle()
         viewModel.onSearchQueryChanged("Hello")
-        advanceUntilIdle()
 
         assertEquals(1, viewModel.uiState.value.filteredTranslations.size)
         assertEquals("Hello", viewModel.uiState.value.filteredTranslations[0].originalText)
@@ -77,7 +72,6 @@ class ListTranslationViewModelTest {
             .thenReturn(Result.failure(Exception("Delete failed")))
 
         viewModel.deleteTranslation(1L)
-        advanceUntilIdle()
 
         assertEquals("Suppression impossible", viewModel.uiState.value.errorMessage)
     }
@@ -88,7 +82,6 @@ class ListTranslationViewModelTest {
             .thenReturn(Result.failure(Exception("Update failed")))
 
         viewModel.toggleFavorite(1L, false)
-        advanceUntilIdle()
 
         assertEquals("Impossible de mettre à jour le favori", viewModel.uiState.value.errorMessage)
     }

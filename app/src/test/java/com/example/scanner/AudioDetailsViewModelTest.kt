@@ -3,8 +3,7 @@
 // import com.example.scanner.data.model.Translation
 // import com.example.scanner.data.repository.TranslationRepository
 // import kotlinx.coroutines.ExperimentalCoroutinesApi
-// import kotlinx.coroutines.test.StandardTestDispatcher
-// import kotlinx.coroutines.test.advanceUntilIdle
+// import kotlinx.coroutines.test.UnconfinedTestDispatcher
 // import kotlinx.coroutines.test.runTest
 // import kotlinx.coroutines.test.setMain
 // import org.junit.Before
@@ -18,7 +17,7 @@
 
 //     private lateinit var translationRepository: TranslationRepository
 //     private lateinit var viewModel: AudioDetailsViewModel
-//     private val testDispatcher = StandardTestDispatcher()
+//     private val testDispatcher = UnconfinedTestDispatcher()
 
 //     @Before
 //     fun setup() {
@@ -36,7 +35,6 @@
 //         `when`(translationRepository.findOne(1L)).thenReturn(Result.success(mockTranslation))
 
 //         viewModel.loadTranslation(1L)
-//         advanceUntilIdle()
 
 //         assertEquals(mockTranslation, viewModel.uiState.value.translation)
 //         assertNull(viewModel.uiState.value.error)
@@ -48,7 +46,6 @@
 //             .thenReturn(Result.failure(Exception("Translation not found")))
 
 //         viewModel.loadTranslation(1L)
-//         advanceUntilIdle()
 
 //         assertNotNull(viewModel.uiState.value.error)
 //         assertNull(viewModel.uiState.value.translation)
@@ -64,9 +61,7 @@
 //         `when`(translationRepository.updateFavorite(1L, true)).thenReturn(Result.success(Unit))
 
 //         viewModel.loadTranslation(1L)
-//         advanceUntilIdle()
 //         viewModel.toggleFavorite()
-//         advanceUntilIdle()
 
 //         verify(translationRepository).updateFavorite(1L, true)
 //     }
@@ -81,11 +76,9 @@
 //         `when`(translationRepository.deleteById(1L)).thenReturn(Result.success(Unit))
 
 //         viewModel.loadTranslation(1L)
-//         advanceUntilIdle()
 
 //         var callbackCalled = false
 //         viewModel.deleteTranslation { callbackCalled = true }
-//         advanceUntilIdle()
 
 //         verify(translationRepository).deleteById(1L)
 //         assertTrue(callbackCalled)
