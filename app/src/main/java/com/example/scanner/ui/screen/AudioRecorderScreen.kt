@@ -36,7 +36,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AudioRecorderScreen(
-    viewModel: AudioRecorderViewModel = koinViewModel(),
+    viewModel: AudioRecorderViewModel = koinViewModel<AudioRecorderViewModel>(),
     onNavigateToTranslationList: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {

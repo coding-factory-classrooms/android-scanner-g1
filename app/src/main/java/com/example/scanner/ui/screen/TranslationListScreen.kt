@@ -23,9 +23,10 @@ import com.example.scanner.ui.viewmodel.ListTranslationViewModel
 @Composable
 fun TranslationListScreen(
     onNavigateBack: () -> Unit = {},
+    onItemClick: (Long) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val viewModel: ListTranslationViewModel = koinViewModel()
+    val viewModel: ListTranslationViewModel = koinViewModel<ListTranslationViewModel>()
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -54,6 +55,14 @@ fun TranslationListScreen(
             label = { Text("Rechercher.") },
             modifier =  Modifier.fillMaxWidth().padding(16.dp),
         )
-        TranslationScreenBody(uiState = uiState, modifier = Modifier)
+
+        
+        TranslationScreenBody(
+            uiState = uiState,
+            onItemClick = onItemClick,
+            onDelete = { id -> viewModel.deleteTranslation(id) },
+            onToggleFavorite = { id, currentIsFave -> viewModel.toggleFavorite(id, currentIsFave) },
+            modifier = Modifier
+        )
     }
 }

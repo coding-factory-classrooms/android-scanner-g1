@@ -12,13 +12,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.scanner.ui.screen.AudioDetailsScreen
 import com.example.scanner.ui.screen.AudioRecorderScreen
 import com.example.scanner.ui.screen.TranslationListScreen
 import com.example.scanner.ui.theme.ScannerTheme
 
 enum class Screen {
     RECORDER,
-    TRANSLATION_LIST
+    TRANSLATION_LIST,
+    TRANSLATION_DETAILS
 }
 
 class MainActivity : ComponentActivity() {
@@ -28,6 +30,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ScannerTheme {
                 var currentScreen by remember { mutableStateOf(Screen.RECORDER) }
+                var selectedTranslationId by remember { mutableStateOf<Long?>(null) }
                 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     when (currentScreen) {
@@ -40,8 +43,21 @@ class MainActivity : ComponentActivity() {
                         Screen.TRANSLATION_LIST -> {
                             TranslationListScreen(
                                 onNavigateBack = { currentScreen = Screen.RECORDER },
+                                onItemClick = { id ->
+                                    selectedTranslationId = id
+                                    currentScreen = Screen.TRANSLATION_DETAILS
+                                },
                                 modifier = Modifier.padding(innerPadding)
                             )
+                        }
+                        Screen.TRANSLATION_DETAILS -> {
+                            selectedTranslationId?.let { id ->
+                                AudioDetailsScreen(
+                                    translationId = id,
+                                    onBackClick = { currentScreen = Screen.TRANSLATION_LIST },
+                                    modifier = Modifier.padding(innerPadding)
+                                )
+                            }
                         }
                     }
                 }
