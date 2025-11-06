@@ -17,6 +17,8 @@ interface TranslationRepository {
     suspend fun findOne(id: Long): Result<Translation>
     
     suspend fun getRecentTranslations(limit: Int): Result<List<Translation>>
+
+    suspend fun deleteById(id: Long): Result<Unit>
 }
 
 class TranslationRepositoryImpl(
@@ -81,6 +83,10 @@ class TranslationRepositoryImpl(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun deleteById(id: Long): Result<Unit> = runCatching {
+        dao.deleteById(id)
     }
 }
 
