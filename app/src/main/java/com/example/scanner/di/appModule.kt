@@ -38,8 +38,9 @@ val appModule = module {
     // Repositories
     single<AudioRepository> { AudioRepositoryImpl(get()) }
     single<TranslationRepository> { TranslationRepositoryImpl(get(), get()) }
-    
+
     // ViewModels
+
     viewModel { AudioRecorderViewModel(get<Application>(), get(), get(), get()) }
     viewModel { ListTranslationViewModel(get()) }
     viewModel { AudioDetailsViewModel(get()) }

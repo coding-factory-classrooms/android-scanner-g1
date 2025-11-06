@@ -41,8 +41,9 @@ fun TranslationScreenBody(
                 Text("Erreur: ${uiState.errorMessage}")
             }
         } else {
+
             TranslationList(
-                translations = uiState.translations,
+                translations = uiState.filteredTranslations,
                 onItemClick = onItemClick,
                 onDelete = onDelete,
                 onToggleFavorite = onToggleFavorite

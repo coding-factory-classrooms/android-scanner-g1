@@ -7,6 +7,7 @@ import com.example.scanner.data.repository.TranslationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -15,8 +16,10 @@ class ListTranslationViewModel (
 ): ViewModel(){
     data class UiState(
         val translations: List<Translation> = emptyList(),
+        val filteredTranslations: List<Translation> = emptyList(),
         val isLoading: Boolean = false,
-        val errorMessage: String? = null
+        val errorMessage: String? = null,
+        val searchQuery: String = "" // j'ai ajoute liste de recherche
     )
     //Seul le ViewModel modifie
     private val _uiState = MutableStateFlow(UiState())
@@ -46,6 +49,27 @@ class ListTranslationViewModel (
         }
     }
 
+
+    fun onSearchQueryChanged(query: String) {
+        _uiState.update { currentState ->
+            val filtered = if (query.isEmpty()) {
+                currentState.translations  // Toutes les traductions
+            } else {
+                currentState.translations.filter {
+                    translation ->
+                    //logique de filtra// // Retourne true si la query est dans l'un OU l'autre
+                    translation.originalText.contains(query, ignoreCase = true) ||
+                    translation.tradText.contains(query, ignoreCase = true)
+                }
+            }
+
+            currentState.copy(
+                searchQuery = query,
+                filteredTranslations = filtered
+            )
+        }
+    }
+    }
     fun deleteTranslation(id: Long) {
         viewModelScope.launch {
             val result = translationRepository.deleteById(id)
