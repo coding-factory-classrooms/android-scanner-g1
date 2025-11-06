@@ -50,9 +50,8 @@ class DatabaseFixtureServiceImpl(
                 createAt = System.currentTimeMillis() - 86400000, // Il y a 1 jour
                 inputLange = "fr-FR",
                 outputLange = "en-US",
-                OriginaleText = "Bonjour, comment allez-vous ?",
-                TradText = "Hello, how are you?",
-                pathAudioFile = "/storage/emulated/0/Download/audio_001.mp3"
+                originalText = "Bonjour, comment allez-vous ?",
+                tradText = "Hello, how are you?"
             ),
             Translation(
                 id = 0,
@@ -60,9 +59,8 @@ class DatabaseFixtureServiceImpl(
                 createAt = System.currentTimeMillis() - 172800000, // Il y a 2 jours
                 inputLange = "en-US",
                 outputLange = "fr-FR",
-                OriginaleText = "Good morning, have a nice day!",
-                TradText = "Bonjour, passez une bonne journée !",
-                pathAudioFile = "/storage/emulated/0/Download/audio_002.mp3"
+                originalText = "Good morning, have a nice day!",
+                tradText = "Bonjour, passez une bonne journée !"
             ),
             Translation(
                 id = 0,
@@ -70,9 +68,8 @@ class DatabaseFixtureServiceImpl(
                 createAt = System.currentTimeMillis() - 259200000, // Il y a 3 jours
                 inputLange = "fr-FR",
                 outputLange = "es-ES",
-                OriginaleText = "Merci beaucoup pour votre aide",
-                TradText = "Muchas gracias por tu ayuda",
-                pathAudioFile = "/storage/emulated/0/Download/audio_003.mp3"
+                originalText = "Merci beaucoup pour votre aide",
+                tradText = "Muchas gracias por tu ayuda"
             ),
             Translation(
                 id = 0,
@@ -80,9 +77,8 @@ class DatabaseFixtureServiceImpl(
                 createAt = System.currentTimeMillis() - 345600000, // Il y a 4 jours
                 inputLange = "de-DE",
                 outputLange = "fr-FR",
-                OriginaleText = "Guten Tag, wie geht es Ihnen?",
-                TradText = "Bonjour, comment allez-vous ?",
-                pathAudioFile = "/storage/emulated/0/Download/audio_004.mp3"
+                originalText = "Guten Tag, wie geht es Ihnen?",
+                tradText = "Bonjour, comment allez-vous ?"
             ),
             Translation(
                 id = 0,
@@ -90,9 +86,8 @@ class DatabaseFixtureServiceImpl(
                 createAt = System.currentTimeMillis() - 432000000, // Il y a 5 jours
                 inputLange = "it-IT",
                 outputLange = "fr-FR",
-                OriginaleText = "Ciao, come stai?",
-                TradText = "Salut, comment vas-tu ?",
-                pathAudioFile = "/storage/emulated/0/Download/audio_005.mp3"
+                originalText = "Ciao, come stai?",
+                tradText = "Salut, comment vas-tu ?"
             )
         )
 

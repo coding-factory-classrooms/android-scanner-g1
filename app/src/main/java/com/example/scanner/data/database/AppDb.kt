@@ -9,7 +9,7 @@ import com.example.scanner.data.model.Translation
 
 @Database(
     entities = [Translation::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDb : RoomDatabase() {

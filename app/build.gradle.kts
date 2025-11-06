@@ -64,10 +64,16 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     
-    // Room
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.compose.material3)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.gson)
     
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

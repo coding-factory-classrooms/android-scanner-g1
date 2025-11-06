@@ -1,77 +1,105 @@
 package com.example.scanner.ui.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scanner.data.dao.TranslationDao
+import com.example.scanner.data.model.Translation
 import com.example.scanner.data.repository.AudioRepository
+import com.example.scanner.data.repository.TranslationRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+
+enum class ScreenState {
+    IDLE,
+    RECORDING,
+    TRANSCRIBED
+}
 
 data class UiState(
-    val isRecording: Boolean = false,
-    val recordedBase64: String? = null,
-    val amplitude: Int = 0,
+    val screenState: ScreenState = ScreenState.IDLE,
+    val transcribedText: String = "",
+    val finalTranscribedText: String? = null,
     val recordingDuration: Long = 0L,
-    val selectedLanguage: String = "fr-FR",
+    val targetLanguage: String = "en",
     val errorMessage: String? = null
 )
 
 class AudioRecorderViewModel(
     application: Application,
-    private val audioRepository: AudioRepository
+    private val audioRepository: AudioRepository,
+    private val translationDao: TranslationDao,
+    private val translationRepository: TranslationRepository
 ) : AndroidViewModel(application) {
 
+    val durationState = MutableStateFlow(0L)
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    private val _uiEffect = MutableSharedFlow<UiEffect>(extraBufferCapacity = 1)
-    val uiEffect: SharedFlow<UiEffect> = _uiEffect.asSharedFlow()
-
-    private var recordingFile: File? = null
     private var durationJob: Job? = null
-    private var amplitudeJob: Job? = null
 
-    fun selectLanguage(languageCode: String) {
-        _uiState.update { it.copy(selectedLanguage = languageCode) }
+    init {
+        viewModelScope.launch {
+            audioRepository.transcribedText.collectLatest { text ->
+                _uiState.update { it.copy(transcribedText = text) }
+            }
+        }
+    }
+
+    fun selectTargetLanguage(languageCode: String) {
+        _uiState.update { it.copy(targetLanguage = languageCode) }
+    }
+
+    fun onDebugClick() {
+        val debugText = "Bonjour"
+        saveTranslationToDatabase(debugText)
+        _uiState.update {
+            it.copy(
+                screenState = ScreenState.TRANSCRIBED,
+                transcribedText = "",
+                finalTranscribedText = debugText,
+                recordingDuration = 0L
+            )
+        }
     }
 
     fun startRecording() {
-        if (audioRepository.isRecording()) {
+        if (_uiState.value.screenState == ScreenState.RECORDING) {
             _uiState.update { it.copy(errorMessage = "L'enregistrement est déjà en cours") }
             return
         }
-        _uiState.update { it.copy(errorMessage = null, recordedBase64 = null) }
-        val fileName = "recording_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}"
+
+        _uiState.update { 
+            it.copy(
+                screenState = ScreenState.IDLE,
+                errorMessage = null,
+                transcribedText = "",
+                finalTranscribedText = null
+            ) 
+        }
+
         viewModelScope.launch {
-            audioRepository.startRecording(getApplication(), fileName).fold(
-                onSuccess = { file ->
-                    recordingFile = file
-                    _uiState.update { it.copy(isRecording = true) }
+            audioRepository.startRecording(getApplication()).fold(
+                onSuccess = {
+                    _uiState.update { it.copy(screenState = ScreenState.RECORDING) }
                     startDurationTracking()
-                    startAmplitudeTracking()
-                    emitEffect(UiEffect.RecordingStarted)
                 },
                 onFailure = { error ->
                     _uiState.update {
                         it.copy(
+                            screenState = ScreenState.IDLE,
                             errorMessage = when (error) {
-                                is IllegalStateException -> "Impossible de démarrer l'enregistrement. Vérifiez que le microphone est disponible."
-                                is SecurityException -> "Permission microphone refusée. Veuillez autoriser l'accès au microphone."
-                                else -> error.message ?: "Erreur lors du démarrage de l'enregistrement"
-                            },
-                            isRecording = false
+                                is IllegalStateException -> "Impossible de démarrer l'enregistrement"
+                                is SecurityException -> "Permission microphone refusée"
+                                else -> error.message ?: "Erreur lors du démarrage"
+                            }
                         )
                     }
                 }
@@ -80,34 +108,68 @@ class AudioRecorderViewModel(
     }
 
     fun stopRecording() {
-        if (!audioRepository.isRecording()) {
-            _uiState.update { it.copy(errorMessage = "Aucun enregistrement en cours") }
-            return
-        }
+        if (_uiState.value.screenState != ScreenState.RECORDING) return
+
         viewModelScope.launch {
             audioRepository.stopRecording().fold(
-                onSuccess = { base64 ->
+                onSuccess = { finalText ->
                     durationJob?.cancel()
-                    amplitudeJob?.cancel()
-                    recordingFile?.delete()
-                    recordingFile = null
+                    saveTranslationToDatabase(finalText)
                     _uiState.update {
                         it.copy(
-                            isRecording = false,
-                            recordedBase64 = base64,
-                            recordingDuration = 0L,
-                            amplitude = 0
+                            screenState = ScreenState.TRANSCRIBED,
+                            transcribedText = "",
+                            finalTranscribedText = finalText,
+                            recordingDuration = 0L
                         )
                     }
-                    emitEffect(UiEffect.RecordingStopped)
                 },
                 onFailure = { error ->
                     _uiState.update {
                         it.copy(
-                            errorMessage = "Erreur lors de l'arrêt de l'enregistrement: ${error.message}",
-                            isRecording = false
+                            screenState = ScreenState.IDLE,
+                            errorMessage = "Erreur: ${error.message}"
                         )
                     }
+                }
+            )
+        }
+    }
+
+    private fun saveTranslationToDatabase(text: String) {
+        if (text.isBlank()) return
+
+        viewModelScope.launch {
+            val sourceLang = "auto"
+            val targetLang = _uiState.value.targetLanguage
+
+            Log.d("AudioRecorderViewModel", "Appel API: source=$sourceLang, target=$targetLang")
+
+            translationRepository.translate(text, sourceLang, targetLang).fold(
+                onSuccess = { translatedText ->
+                    translationDao.insert(
+                        Translation(
+                            inputLange = sourceLang,
+                            outputLange = targetLang,
+                            originalText = text,
+                            tradText = translatedText
+                        )
+                    )
+                    Log.d("AudioRecorderViewModel", "✓ Traduction sauvegardée")
+                },
+                onFailure = { error ->
+                    translationDao.insert(
+                        Translation(
+                            inputLange = sourceLang,
+                            outputLange = targetLang,
+                            originalText = text,
+                            tradText = ""
+                        )
+                    )
+                    _uiState.update { 
+                        it.copy(errorMessage = "Erreur de traduction: ${error.message}") 
+                    }
+                    Log.e("AudioRecorderViewModel", "✗ Erreur traduction", error)
                 }
             )
         }
@@ -116,31 +178,19 @@ class AudioRecorderViewModel(
     private fun startDurationTracking() {
         durationJob?.cancel()
         durationJob = viewModelScope.launch {
-            var duration = 0L
-            while (audioRepository.isRecording()) {
+            durationState.value = 0L
+            while (_uiState.value.screenState == ScreenState.RECORDING && durationState.value < 60000) {
                 delay(1000)
-                duration += 1000
-                _uiState.update { it.copy(recordingDuration = duration) }
+                durationState.value += 1000
+                _uiState.update { it.copy(recordingDuration = durationState.value) }
             }
-        }
-    }
-
-    private fun startAmplitudeTracking() {
-        amplitudeJob?.cancel()
-        amplitudeJob = viewModelScope.launch {
-            while (audioRepository.isRecording()) {
-                delay(50)
-                _uiState.update { it.copy(amplitude = audioRepository.getCurrentAmplitude()) }
-            }
+            if (durationState.value >= 60000) stopRecording()
         }
     }
 
     fun resetState() {
-        if (audioRepository.isRecording()) stopRecording()
-        recordingFile?.delete()
-        recordingFile = null
+        if (_uiState.value.screenState == ScreenState.RECORDING) stopRecording()
         _uiState.value = UiState()
-        emitEffect(UiEffect.StateReset)
     }
 
     fun clearError() {
@@ -148,21 +198,13 @@ class AudioRecorderViewModel(
     }
 
     fun onPermissionResult(isGranted: Boolean) {
-        val currentState = _uiState.value
-        if (isGranted && !currentState.isRecording && currentState.recordedBase64 == null) {
+        if (isGranted && _uiState.value.screenState == ScreenState.IDLE) {
             _uiState.update { it.copy(errorMessage = null) }
             startRecording()
         } else if (!isGranted) {
-            _uiState.update { it.copy(errorMessage = "Permission microphone refusée. L'enregistrement audio nécessite cette permission.") }
+            _uiState.update { 
+                it.copy(errorMessage = "Permission microphone refusée") 
+            }
         }
-    }
-
-    private fun emitEffect(effect: UiEffect) = viewModelScope.launch { _uiEffect.emit(effect) }
-
-    sealed class UiEffect {
-        object RecordingStarted : UiEffect()
-        object RecordingStopped : UiEffect()
-        object StateReset : UiEffect()
-        data class Info(val message: String) : UiEffect()
     }
 }

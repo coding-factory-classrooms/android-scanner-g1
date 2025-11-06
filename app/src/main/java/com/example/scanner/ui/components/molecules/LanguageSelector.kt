@@ -50,7 +50,7 @@ fun LanguageSelector(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Langue de transcription:",
+            text = "Langue de sortie (traduction):",
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )

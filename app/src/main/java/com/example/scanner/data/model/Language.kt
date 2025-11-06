@@ -1,15 +1,22 @@
 package com.example.scanner.data.model
 
-data class Language(val code: String, val name: String)
+data class Language(
+    val code: String, 
+    val name: String
+)
 
 val availableLanguages = listOf(
-    Language("fr-FR", "Français"),
-    Language("en-US", "English"),
-    Language("es-ES", "Español"),
-    Language("de-DE", "Deutsch"),
-    Language("it-IT", "Italiano"),
-    Language("pt-BR", "Português"),
-    Language("ja-JP", "日本語"),
-    Language("ko-KR", "한국어"),
-    Language("zh-CN", "中文")
+    Language("fr", "Français"),
+    Language("en", "English"),
+    Language("es", "Español"),
+    Language("de", "Deutsch"),
+    Language("it", "Italiano"),
+    Language("pt", "Português"),
+    Language("ja", "日本語"),
+    Language("ko", "한국어"),
+    Language("zh", "中文")
 )
+
+fun findLanguageByCode(code: String): Language? {
+    return availableLanguages.find { it.code == code }
+}

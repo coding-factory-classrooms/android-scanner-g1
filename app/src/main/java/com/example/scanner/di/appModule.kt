@@ -6,7 +6,9 @@ import com.example.scanner.data.repository.AudioRepository
 import com.example.scanner.data.repository.AudioRepositoryImpl
 import com.example.scanner.data.repository.TranslationRepository
 import com.example.scanner.data.repository.TranslationRepositoryImpl
+import com.example.scanner.data.service.ApiClient
 import com.example.scanner.data.service.AudioRecorderService
+import com.example.scanner.data.service.TranslationApiService
 import com.example.scanner.data.service.AudioRecorderServiceImpl
 import com.example.scanner.data.service.DatabaseFixtureService
 import com.example.scanner.data.service.DatabaseFixtureServiceImpl
@@ -19,6 +21,7 @@ import org.koin.dsl.module
 val appModule = module {
     // Services
     single<AudioRecorderService> { AudioRecorderServiceImpl() }
+    single<TranslationApiService> { ApiClient.create().create(TranslationApiService::class.java) }
     
     // Database
     single { AppDb.create(androidContext()) }
@@ -29,8 +32,9 @@ val appModule = module {
     
     // Repositories
     single<AudioRepository> { AudioRepositoryImpl(get()) }
-    single<TranslationRepository> { TranslationRepositoryImpl(get()) }
+    single<TranslationRepository> { TranslationRepositoryImpl(get(), get()) }
+    
     // ViewModels
-    viewModel { AudioRecorderViewModel(get(), get()) }
+    viewModel { AudioRecorderViewModel(get(), get(), get(), get()) }
     viewModel { ListTranslationViewModel(get()) }
 }
