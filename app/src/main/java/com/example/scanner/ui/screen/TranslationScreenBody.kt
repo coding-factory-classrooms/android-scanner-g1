@@ -17,6 +17,7 @@ import com.example.scanner.ui.viewmodel.ListTranslationViewModel.UiState
 @Composable
 fun TranslationScreenBody(
     uiState: UiState,
+    onDelete: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -38,16 +39,19 @@ fun TranslationScreenBody(
                 Text("Erreur: ${uiState.errorMessage}")
             }
         } else {
-            TranslationList(translations = uiState.translations)
+            TranslationList(translations = uiState.translations, onDelete = onDelete)
         }
     }
 }
 
 @Composable
-fun TranslationList(translations: List<Translation>) {
+fun TranslationList(translations: List<Translation>, onDelete: (Long) -> Unit) {
     LazyColumn {
         items(translations) { translation ->
-            TranslationItem(translation = translation)
+            TranslationItem(
+                translation = translation,
+                onDeleteClick = { onDelete(translation.id) }
+            )
         }
     }
 }

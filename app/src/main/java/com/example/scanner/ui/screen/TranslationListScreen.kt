@@ -47,6 +47,10 @@ fun TranslationListScreen(
             }
         }
         
-        TranslationScreenBody(uiState = uiState, modifier = Modifier)
+        TranslationScreenBody(
+            uiState = uiState,
+            onDelete = { id -> viewModel.deleteTranslation(id) },
+            modifier = Modifier
+        )
     }
 }
