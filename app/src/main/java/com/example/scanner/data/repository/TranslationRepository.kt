@@ -19,6 +19,7 @@ interface TranslationRepository {
     suspend fun getRecentTranslations(limit: Int): Result<List<Translation>>
 
     suspend fun deleteById(id: Long): Result<Unit>
+    suspend fun updateFavorite(id: Long, isFave: Boolean): Result<Unit>
 }
 
 class TranslationRepositoryImpl(
@@ -87,6 +88,10 @@ class TranslationRepositoryImpl(
 
     override suspend fun deleteById(id: Long): Result<Unit> = runCatching {
         dao.deleteById(id)
+    }
+
+    override suspend fun updateFavorite(id: Long, isFave: Boolean): Result<Unit> = runCatching {
+        dao.updateFavorite(id, isFave)
     }
 }
 

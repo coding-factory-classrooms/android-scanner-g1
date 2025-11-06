@@ -56,4 +56,15 @@ class ListTranslationViewModel (
             }
         }
     }
+
+    fun toggleFavorite(id: Long, currentIsFave: Boolean) {
+        viewModelScope.launch {
+            val result = translationRepository.updateFavorite(id, !currentIsFave)
+            if (result.isSuccess) {
+                loadTranslations()
+            } else {
+                _uiState.value = _uiState.value.copy(errorMessage = "Impossible de mettre à jour le favori")
+            }
+        }
+    }
 }
