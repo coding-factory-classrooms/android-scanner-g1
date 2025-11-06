@@ -69,7 +69,7 @@ class ListTranslationViewModel (
             )
         }
     }
-    }
+
     fun deleteTranslation(id: Long) {
         viewModelScope.launch {
             val result = translationRepository.deleteById(id)
