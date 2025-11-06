@@ -38,6 +38,7 @@ class ListTranslationViewModel (
             if (result.isSuccess) {
                 _uiState.value = _uiState.value.copy(
                 translations = result.getOrNull() ?: emptyList(),
+                    filteredTranslations = result.getOrNull() ?: emptyList(),
                 isLoading = false
                 )
             } else {
