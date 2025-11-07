@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.example.scanner.data.model.Translation
 import com.example.scanner.ui.viewmodel.AudioDetailsViewModel
 import org.koin.androidx.compose.koinViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +57,7 @@ fun AudioDetailsScreen(
                     val isFave = uiState.translation?.isFave == true
                     IconButton(onClick = { viewModel.toggleFavorite() }) {
                         Icon(
-                            imageVector = if (isFave) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            imageVector = if (isFave) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = if (isFave) "Retirer des favoris" else "Ajouter aux favoris"
                         )
                     }
@@ -116,7 +119,6 @@ fun AudioDetailsContent(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
 
-        // === Original text ===
         Column {
             Text(
                 text = "Langue d’origine : ${translation.inputLange}",
@@ -130,7 +132,6 @@ fun AudioDetailsContent(
             )
         }
 
-        // === Translated text ===
         Column {
             Text(
                 text = "Langue traduite : ${translation.outputLange}",
@@ -142,6 +143,16 @@ fun AudioDetailsContent(
                 text = translation.tradText,
                 style = MaterialTheme.typography.bodyLarge
             )
+        }
+
+        Column {
+            val timestamp = translation.createAt
+            val date = Date(timestamp)
+            val format = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+            val formattedDate = format.format(date)
+
+
+            Text( text = "Date de la traduction : $formattedDate" )
         }
     }
 }

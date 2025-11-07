@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.scanner.ui.components.organisms.TopBar
 import com.example.scanner.ui.screen.AudioDetailsScreen
 import com.example.scanner.ui.screen.AudioRecorderScreen
 import com.example.scanner.ui.screen.TranslationListScreen
@@ -32,7 +33,8 @@ class MainActivity : ComponentActivity() {
                 var currentScreen by remember { mutableStateOf(Screen.RECORDER) }
                 var selectedTranslationId by remember { mutableStateOf<Long?>(null) }
                 
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize(), topBar = { TopBar() })
+                { innerPadding ->
                     when (currentScreen) {
                         Screen.RECORDER -> {
                             AudioRecorderScreen(

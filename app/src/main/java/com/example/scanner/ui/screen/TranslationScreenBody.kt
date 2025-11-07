@@ -14,13 +14,23 @@ import com.example.scanner.ui.components.molecules.TranslationItem
 import com.example.scanner.ui.viewmodel.ListTranslationViewModel.UiState
 
 
+fun getFilteredDataArray(data: List<Translation>, isFiltered: Boolean): List<Translation> {
+    return if (isFiltered) {
+        data.filter { it.isFave }
+    } else {
+        data
+    }
+}
+
+
 @Composable
 fun TranslationScreenBody(
     uiState: UiState,
     onItemClick: (Long) -> Unit = {},
     onDelete: (Long) -> Unit,
     onToggleFavorite: (id: Long, currentIsFave: Boolean) -> Unit = { _, _ -> },
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isFiltered: Boolean
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         if (uiState.isLoading) {
@@ -46,7 +56,8 @@ fun TranslationScreenBody(
                 translations = uiState.filteredTranslations,
                 onItemClick = onItemClick,
                 onDelete = onDelete,
-                onToggleFavorite = onToggleFavorite
+                onToggleFavorite = onToggleFavorite,
+                isFiltered = isFiltered
             )
         }
     }
@@ -57,10 +68,11 @@ fun TranslationList(
     translations: List<Translation>,
     onItemClick: (Long) -> Unit = {},
     onDelete: (Long) -> Unit,
-    onToggleFavorite: (id: Long, currentIsFave: Boolean) -> Unit = { _, _ -> }
+    onToggleFavorite: (id: Long, currentIsFave: Boolean) -> Unit = { _, _ -> },
+    isFiltered: Boolean
 ) {
     LazyColumn {
-        items(translations) { translation ->
+        items(getFilteredDataArray(translations, isFiltered = isFiltered)) { translation ->
             TranslationItem(
                 translation = translation,
                 onItemClick = { onItemClick(translation.id) },
