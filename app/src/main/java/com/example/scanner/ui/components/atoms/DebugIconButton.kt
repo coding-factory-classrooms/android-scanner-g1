@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 fun DebugIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    size: Dp = 48.dp
 ) {
     Button(
         onClick = onClick,
