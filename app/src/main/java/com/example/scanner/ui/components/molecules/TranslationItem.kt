@@ -54,16 +54,16 @@ fun TranslationItem(
                 verticalAlignment = Alignment.Top
             ) {
                 // Badge langue source -> langue cible
-                val sourceLang = findLanguageByCode(translation.inputLange)
                 val targetLang = findLanguageByCode(translation.outputLange)
                 Text(
-                    text = "${sourceLang?.name ?: translation.inputLange} -> ${targetLang?.name ?: translation.outputLange}",
+                    text = "Trad in  ${targetLang?.name ?: translation.outputLange}",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium
                 )
 
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    // Bouton supprimer
                     IconButton(
                         onClick = onDeleteClick,
                         modifier = Modifier.size(40.dp)

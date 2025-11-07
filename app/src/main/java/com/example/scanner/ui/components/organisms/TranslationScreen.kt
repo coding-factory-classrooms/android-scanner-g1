@@ -1,4 +1,4 @@
-package com.example.scanner.ui.screen
+package com.example.scanner.ui.components.organisms
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

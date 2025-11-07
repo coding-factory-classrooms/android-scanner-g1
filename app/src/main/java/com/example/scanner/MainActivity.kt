@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
                 var selectedTranslationId by remember { mutableStateOf<Long?>(null) }
                 
                 Scaffold(modifier = Modifier.fillMaxSize(), topBar = { TopBar() })
+
                 { innerPadding ->
                     when (currentScreen) {
                         Screen.RECORDER -> {

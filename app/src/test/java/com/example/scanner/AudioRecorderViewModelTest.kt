@@ -3,7 +3,6 @@ package com.example.scanner.ui.viewmodel
 import android.app.Application
 import android.content.Context
 import com.example.scanner.data.dao.TranslationDao
-import com.example.scanner.data.model.Translation
 import com.example.scanner.data.repository.AudioRepository
 import com.example.scanner.data.repository.TranslationRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.*
 import org.mockito.Mockito.*
-import org.mockito.ArgumentMatchers.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.resetMain
 
